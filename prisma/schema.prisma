@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Ticket {
+  id            String   @id @default(cuid())
+  subject       String
+  description   String
+  customerName  String
+  customerEmail String
+  assignedTo    String?
+  priority      String   @default("Medium")
+  status        String   @default("Open")
+  category      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  notifications Notification[]
+}
+
+model Notification {
+  id      String  @id @default(cuid())
+  message String
+  isRead  Boolean @default(false)
+
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String?
+  role      String   @default("Agent")
+  createdAt DateTime @default(now())
+}

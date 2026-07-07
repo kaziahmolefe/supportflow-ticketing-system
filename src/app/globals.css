@@ -2,7 +2,23 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #092992;
+  --card: #F5F7FB;
+  --sidebar:#0B1020;
+  --primary: #22F5EFF;
+  --primary-soft: #445CFF;
+  --text:#0F172A;
+  --surface:#E9EEF8;
+}
+
+.dark{
+  --bg: #060A13;
+  --card:#161D31;
+  --sidebar:#050812;
+  --primary:#4C6FFF;
+  --primary-soft:#6886FF;
+  --text:#F8FAFC;
+  --surface:#232B45;
 }
 
 @theme inline {
@@ -20,7 +36,52 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
+  transition:.3s;
+
+}
+
+*{
+  box-sizing: border-box;
+  padding:0;
+  margin:0;
+}
+
+html{
+font-family:var(--font-inter);
+}
+
+body{
+font-family:var(--font-inter);
+}
+
+h1,h2,h3{
+font-family:var(--font-display);
+}
+
+.metric{
+font-family:var(--font-display);
+}
+
+button,
+input,
+td,
+th,
+label,
+span,
+p{
+font-family:inherit;
+}
+
+.table-header{
+font-size:.8rem;
+font-weight:700;
+
+letter-spacing:.08em;
+
+text-transform:uppercase;
+
+opacity:.55;
 }
