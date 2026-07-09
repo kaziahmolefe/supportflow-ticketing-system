@@ -55,33 +55,29 @@ export default function TicketPriorityChart() {
   }
 
   useEffect(() => {
+
     loadPriorities();
 
     const refresh = () => {
-      loadPriorities();
+
+        loadPriorities();
+
     };
 
-    const source = new EventSource("/api/events");
-
-    source.addEventListener(
-      "ticket-created",
-      refresh
-    );
-
-    source.addEventListener(
-      "ticket-updated",
-      refresh
-    );
-
-    source.addEventListener(
-      "ticket-deleted",
-      refresh
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
     return () => {
 
-      source.close();
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
+
     };
+
   }, []);
 
   return (

@@ -35,17 +35,29 @@ export default function NotificationBell() {
 
     useEffect(() => {
 
-        const source = new EventSource("/api/events");
+        loadNotifications();
 
-        source.addEventListener(
-            "notification-created",
-            loadNotifications
+        const refresh = () => {
+
+            loadNotifications();
+
+        };
+
+        window.addEventListener(
+            "dashboard-refresh",
+            refresh
         );
 
         return () => {
-            source.close();
+
+            window.removeEventListener(
+                "dashboard-refresh",
+                refresh
+            );
+
         };
-    }, []);
+
+        }, []);
 
     const unread = notifications.filter((n) => !n.isRead).length;
 

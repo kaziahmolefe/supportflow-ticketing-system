@@ -31,8 +31,8 @@ model Notification {
   message String
   isRead  Boolean @default(false)
 
-  ticketId String
-  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
 }

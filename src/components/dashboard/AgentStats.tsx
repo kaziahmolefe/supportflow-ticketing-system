@@ -74,33 +74,29 @@ export default function AgentStats() {
   }
 
   useEffect(() => {
+
     loadStats();
 
     const refresh = () => {
-      loadStats();
+
+        loadStats();
+
     };
 
-    const source = new EventSource("/api/events");
-
-    source.addEventListener(
-      "ticket-created",
-      refresh
-    );
-
-    source.addEventListener(
-      "ticket-updated",
-      refresh
-    );
-
-    source.addEventListener(
-      "ticket-deleted",
-      refresh
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
     return () => {
 
-      source.close();
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
+
     };
+
   }, []);
 
   return (

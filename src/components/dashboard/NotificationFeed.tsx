@@ -19,22 +19,35 @@ export default function NotificationFeed() {
   const audio = useRef<HTMLAudioElement | null>(null);
 
   async function loadNotifications() {
-    const response = await fetch("/api/notifications");
+    
+    try {
+      const response = await fetch("/api/notifications");
 
-    if (!response.ok) return;
+      if (!response.ok) {
+        console.error(
+          "Notifications:",
+          response.status
+        ); return;
+      }
 
-    const data: Notification[] = await response.json();
+      const data: Notification[] = await response.json();
 
-    if (
-      previousCount.current > 0 &&
-      data.length > previousCount.current
-    ) {
-      audio.current?.play().catch(() => {});
+      if (
+        previousCount.current > 0 &&
+        data.length > previousCount.current
+      ) {
+        audio.current?.play().catch(() => {});
+      }
+
+      previousCount.current = data.length;
+
+      setNotifications(data.slice(0, 5));
+    } catch (error) {
+      console.error(
+        "loadNotifications failed",
+        error
+      );
     }
-
-    previousCount.current = data.length;
-
-    setNotifications(data.slice(0, 5));
   }
 
   async function markAsRead(id: string) {
@@ -66,26 +79,38 @@ export default function NotificationFeed() {
 
     loadNotifications();
 
-    const interval = setInterval(
-      loadNotifications,
-      3000
-    );
+    //const interval = setInterval(
+      //loadNotifications,
+      //3000
+    //);
 
-    return () => clearInterval(interval);
+    //return () => clearInterval(interval);
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
 
-    const source = new EventSource("/api/events");
+    loadNotifications();
 
-    source.addEventListener(
-      "notification-created",
-      loadNotifications
+    const refresh = () => {
+
+        loadNotifications();
+
+    };
+
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
     return () => {
-      source.close();
+
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
+
     };
+
   }, []);
 
   return (

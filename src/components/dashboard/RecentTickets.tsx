@@ -24,24 +24,29 @@ export default function RecentTickets() {
   }
 
   useEffect(() => {
+
     loadTickets();
-  }, []);
-
-  useEffect(() => {
-
-    const source = new EventSource("/api/events");
 
     const refresh = () => {
-      loadTickets();
+
+        loadTickets();
+
     };
 
-    source.addEventListener("ticket-created", refresh);
-    source.addEventListener("ticket-updated", refresh);
-    source.addEventListener("ticket-deleted", refresh);
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
+    );
 
     return () => {
-      source.close();
+
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
+
     };
+
   }, []);
 
   function statusClass(status: string) {

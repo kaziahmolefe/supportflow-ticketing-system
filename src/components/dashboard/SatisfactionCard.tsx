@@ -36,16 +36,23 @@ export default function SatisfactionCard() {
 
     loadSatisfaction();
 
-    const source = new EventSource("/api/events");
+    const refresh = () => {
 
-    source.addEventListener(
-      "notification-created",
-      loadSatisfaction
+        loadSatisfaction();
+
+    };
+
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
     return () => {
 
-      source.close();
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
 
     };
 

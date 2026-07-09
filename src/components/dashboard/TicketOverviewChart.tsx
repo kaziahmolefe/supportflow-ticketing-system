@@ -72,33 +72,29 @@ export default function TicketOverviewChart() {
   }
 
   useEffect(() => {
+
     loadChart();
 
     const refresh = () => {
-      loadChart();
+
+        loadChart();
+
     };
 
-    const source = new EventSource("/api/events");
-
-    source.addEventListener(
-    "ticket-created",
-    refresh
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
-    source.addEventListener(
-      "ticket-updated",
-      refresh
-    );
+    return () => {
 
-    source.addEventListener(
-      "ticket-deleted",
-      refresh
-    );
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
 
-    return () =>{
-
-      source.close();
     };
+
   }, []);
 
   return (

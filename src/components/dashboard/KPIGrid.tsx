@@ -89,30 +89,26 @@ export default function KPIGrid() {
 
     loadKPIs();
 
-    const source = new EventSource(".api.events");
-
     const refresh = () => {
-      loadKPIs();
+
+        loadKPIs();
+
     };
 
-    source.addEventListener(
-      "ticket-created",
-      refresh
-    );
-
-    source.addEventListener(
-      "ticket-updated",
-      refresh
-    );
-
-    source.addEventListener(
-      "ticket-deleted",
-      refresh
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
     return () => {
-      source.close();
+
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
+
     };
+
   }, []);
 
   return (

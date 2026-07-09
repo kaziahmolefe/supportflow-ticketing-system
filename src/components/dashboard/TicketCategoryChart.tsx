@@ -56,33 +56,30 @@ export default function TicketCategoryChart() {
   }
 
   useEffect(() => {
+
     loadCategories();
 
-    const source = new EventSource("/api/events");
-
     const refresh = () => {
-      loadCategories();
-    }
 
-    source.addEventListener(
-      "ticket-created",
-      refresh
-    );
+        loadCategories();
 
-    source.addEventListener(
-      "ticket-updated",
-      refresh
-    );
+    };
 
-    source.addEventListener(
-      "ticket-deleted",
-      refresh
+    window.addEventListener(
+        "dashboard-refresh",
+        refresh
     );
 
     return () => {
-      source.close();
+
+        window.removeEventListener(
+            "dashboard-refresh",
+            refresh
+        );
+
     };
-}, []);
+
+  }, []);
 
   return (
     <div className="rounded-[36px] bg-[var(--card)] p-8 shadow-sm">

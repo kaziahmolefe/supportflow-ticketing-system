@@ -57,28 +57,30 @@ export default function TicketTable({
   }, [tickets, search]);
 
   async function deleteTicket(id: string) {
+
     const confirmed = window.confirm(
-        "Are you sure you want to delete this tickets?"
+        "Are you sure you want to delete this ticket?"
     );
 
     if (!confirmed) return;
 
-    const response = await fetch('/api/tickets/${id}', {
+    const response = await fetch(`/api/tickets/${id}`, {
         method: "DELETE",
     });
 
-    setTickets(
-        tickets.filter((t) => t.id !== id)
-    );
-
     if (!response.ok) {
+
         alert("Failed to delete ticket.");
+
         return;
+
     }
 
-    setTickets((current) => current.filter((ticket) => ticket.id !== id));
-  }
+    setTickets((current) =>
+        current.filter((ticket) => ticket.id !== id)
+    );
 
+  }
   function priorityBadge(priority: string) {
     switch (priority) {
         case "High":
@@ -115,7 +117,7 @@ export default function TicketTable({
 
             <button 
             onClick={() => setShowCreateModal(true)}
-            className="rounded-x1 bg-blue-600 px-5 py-3 text-white hover:bg-blue-700">
+            className="rounded-xl bg-blue-600 px-5 py-3 text-white hover:bg-blue-700">
                 + New Ticket
             </button>
         </div>
@@ -126,11 +128,11 @@ export default function TicketTable({
                 placeholder="Search tickets..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-x1 border p-3"
+                className="w-full rounded-xl border p-3"
             />
         </div>
 
-        <div className="overflow-hidden rounded-x1 border bg-white dark:bg-black shadow-sm">
+        <div className="overflow-hidden rounded-xl border bg-white dark:bg-black shadow-sm">
             <table className="w-full">
                 <thead className="bg-gray-100 dark:bg-gray-600">
                     <tr>
@@ -168,14 +170,14 @@ export default function TicketTable({
                                 <div className="flex justify-center gap-2">
                                     <button
                                         onClick={() => setSelectedTicket(ticket)}
-                                        className="rounded-x1 bg-indigo-600 px-3 py-1 text-white hover:bg-indigo-700"
+                                        className="rounded-xl bg-indigo-600 px-3 py-1 text-white hover:bg-indigo-700"
                                     >
                                         Edit
                                     </button>
 
                                     <button
                                         onClick={() => deleteTicket(ticket.id)}
-                                        className="rounded-x1 bg-red-600 px-3 py-1 text-white hover:bg-red-700"
+                                        className="rounded-xl bg-red-600 px-3 py-1 text-white hover:bg-red-700"
                                     >
                                         Delete
                                     </button>

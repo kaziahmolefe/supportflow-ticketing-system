@@ -25,33 +25,29 @@ export default function RecentActivity() {
     }
 
     useEffect(() => {
+
         loadActivity();
 
         const refresh = () => {
+
             loadActivity();
+
         };
 
-        const source = new EventSource("/api/events");
-
-    source.addEventListener(
-        "ticket-created",
-        refresh
-    );
-
-    source.addEventListener(
-        "ticket-updated",
-        refresh
-    );
-
-    source.addEventListener(
-        "ticket-deleted",
-        refresh
-    );
+        window.addEventListener(
+            "dashboard-refresh",
+            refresh
+        );
 
         return () => {
 
-            source.close();
+            window.removeEventListener(
+                "dashboard-refresh",
+                refresh
+            );
+
         };
+
     }, []);
 
     async function markAsRead(id: string) {
@@ -70,6 +66,9 @@ export default function RecentActivity() {
         )
     );
 
+    window.dispatchEvent(
+        new Event("notificationsUpdated")
+    );
     }
 
     return (

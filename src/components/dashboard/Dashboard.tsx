@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 
+import { useEffect } from "react";
 
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
@@ -19,6 +20,46 @@ import NotificationFeed from "./NotificationFeed";
 
 
 export default function Dashboard() {
+
+  useEffect(() => {
+
+    const source = new EventSource("/api/events");
+
+    const refresh = () => {
+
+        window.dispatchEvent(
+            new Event("dashboard-refresh")
+        );
+
+    };
+
+    source.addEventListener(
+        "ticket-created",
+        refresh
+    );
+
+    source.addEventListener(
+        "ticket-updated",
+        refresh
+    );
+
+    source.addEventListener(
+        "ticket-deleted",
+        refresh
+    );
+
+    source.addEventListener(
+        "notification-created",
+        refresh
+    );
+
+    return () => {
+
+        source.close();
+
+    };
+
+  }, []);
 
   return (
     <div
